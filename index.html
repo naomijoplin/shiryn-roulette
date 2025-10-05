@@ -79,27 +79,30 @@
   </div>
   <button onclick="spin()">ルーレットを回す</button>
   <div id="result"></div>
+<script>
+function spin() {
+  // 期限チェック
+  const deadline = new Date('2025-11-15T23:59:59');
+  const now = new Date();
+  if (now > deadline) {
+    alert('このルーレットの開催期間は終了しました。ご参加ありがとうございました！');
+    return;
+  }
 
-  <script>
-    function spin(const deadline = new Date('2025-11-15T23:59:59');
-const now = new Date();
-if (now > deadline) {
-  alert('このルーレットの開催期間は終了しました。ご参加ありがとうございました！');
-  return;
+  // ルーレット処理
+  const wheel = document.getElementById('wheel');
+  const result = document.getElementById('result');
+  const angle = Math.floor(Math.random() * 360) + 720;
+  wheel.style.transition = 'transform 3s ease-out';
+  wheel.style.transform = `rotate(${angle}deg)`;
+  setTimeout(() => {
+    const finalAngle = angle % 360;
+    const outcome = finalAngle < 180 ? '当たり🎯' : 'はずれ💦';
+    result.textContent = `結果：${outcome}`;
+  }, 3000);
 }
-) {
-      const wheel = document.getElementById('wheel');
-      const result = document.getElementById('result');
-      const angle = Math.floor(Math.random() * 360) + 720;
-      wheel.style.transition = 'transform 3s ease-out';
-      wheel.style.transform = `rotate(${angle}deg)`;
+</script>
 
-      setTimeout(() => {
-        const finalAngle = angle % 360;
-        const outcome = finalAngle < 180 ? '当たり🎯' : 'はずれ💦';
-        result.textContent = `結果：${outcome}`;
-      }, 3000);
-    }
-  </script>
+
 </body>
 </html>
