@@ -67,6 +67,11 @@
   当たりが出たら、ちょっと嬉しい特典があるかも…？<br>
   ぜひチャレンジしてみてください！
 </p>
+  <p style="margin-top: 20px; font-weight: bold;">
+このルーレットは【2025年11月15日まで】ご利用いただけます。<br>
+1日1回の運試し、ぜひ期間中にチャレンジしてください！
+</p>
+
   <div id="pointer"></div>
   <div id="wheel">
     <div class="segment" style="transform: rotate(0deg);">当たり</div>
@@ -76,7 +81,13 @@
   <div id="result"></div>
 
   <script>
-    function spin() {
+    function spin(const deadline = new Date('2025-11-15T23:59:59');
+const now = new Date();
+if (now > deadline) {
+  alert('このルーレットの開催期間は終了しました。ご参加ありがとうございました！');
+  return;
+}
+) {
       const wheel = document.getElementById('wheel');
       const result = document.getElementById('result');
       const angle = Math.floor(Math.random() * 360) + 720;
