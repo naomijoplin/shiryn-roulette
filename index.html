@@ -80,6 +80,25 @@
   <button onclick="spin()">ルーレットを回す</button>
   <div id="result"></div>
 <script>
+  .segment {
+  width: 50%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform-origin: left center;
+  background: #f66;
+  color: #fff;
+  font-size: 20px;
+  line-height: 300px;
+  text-align: center;
+  border-top-right-radius: 100% 100%;
+}
+.segment:nth-child(2) {
+  transform: rotate(180deg);
+  background: #6c6;
+}
+
 function spin() {
   // 期限チェック
   const deadline = new Date('2025-11-15T23:59:59');
