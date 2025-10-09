@@ -35,18 +35,19 @@
     }
    .label {
   position: absolute;
-  width: 40%;              /* ← 少し狭める */
-  height: 40%;             /* ← 高さも調整 */
+  width: 30%;              /* ← さらに狭める */
+  height: 30%;             /* ← 高さも縮める */
   top: 50%;
   left: 50%;
   transform-origin: 0% 0%;
   text-align: center;
-  font-size: clamp(10px, 2.5vw, 14px); /* ← 画面に応じて自動調整 */
+  font-size: clamp(9px, 2vw, 12px); /* ← 画面に応じて自動調整 */
   font-weight: bold;
   color: #fff;
-  line-height: 1.2;        /* ← 行間を詰めて収まりやすく */
-  word-break: keep-all;
+  line-height: 1.1;        /* ← 行間を詰める */
+  word-break: break-word;  /* ← 長い単語も折り返す */
 }
+
 
     #pointer {
       width: 0; height: 0;
@@ -108,7 +109,7 @@
       'プチデザートサービス',
       '店長おすすめ一品',
       'プチおかしプレゼント',
-      'はずれ💦'
+      '次回使える割引券'
     ];
 
     const wheel = document.getElementById('wheel');
@@ -117,7 +118,7 @@
       const label = document.createElement('div');
       label.className = 'label';
       label.textContent = text;
-      label.style.transform = `rotate(${i * (360 / outcomes.length)}deg) translate(35%) rotate(90deg)`;
+      label.style.transform = `rotate(${i * (360 / outcomes.length)}deg) translate(50%) rotate(90deg)`;
       wheel.appendChild(label);
     });
 
