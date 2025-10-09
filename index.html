@@ -13,12 +13,11 @@
       padding: 10px;
     }
     h1 {
-  font-size: clamp(16px, 5vw, 24px); /* 画面サイズに応じて文字サイズ調整 */
-  white-space: nowrap;               /* 改行を防ぐ */
-  overflow: hidden;                  /* はみ出し防止（必要なら） */
-  text-overflow: ellipsis;          /* はみ出したら「…」で省略（任意） */
-}
-
+      font-size: clamp(16px, 5vw, 24px);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
     #wheel {
       width: 90vw;
       max-width: 320px;
@@ -56,6 +55,11 @@
       0% { transform: scale(0.8); opacity: 0; }
       50% { transform: scale(1.1); opacity: 1; }
       100% { transform: scale(1); }
+    }
+    @keyframes flash {
+      0% { filter: drop-shadow(0 0 2px #f00); }
+      50% { filter: drop-shadow(0 0 10px #ff0); }
+      100% { filter: drop-shadow(0 0 2px #f00); }
     }
     button {
       padding: 10px 20px;
@@ -162,16 +166,5 @@
 
         const outcome = outcomes[hitIndex];
 
-        document.querySelectorAll('path').forEach(p => p.style.opacity = '1');
-        document.querySelector(`.slice${hitIndex}`).style.opacity = '0.6';
-
-        const resultEl = document.getElementById('result');
-       resultEl.innerHTML = `🎯 結果：<br>${outcome.join(' ')}`;
-        resultEl.style.animation = 'none';
-        void resultEl.offsetWidth;
-        resultEl.style.animation = 'pop 0.6s ease';
-      }, 3000);
-    }
-  </script>
-</body>
-</html>
+        document.querySelectorAll('path').forEach(p => {
+          p.style.opacity = '1';
