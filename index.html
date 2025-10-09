@@ -38,7 +38,7 @@
       height: 0;
       border-left: 15px solid transparent;
       border-right: 15px solid transparent;
-      border-top: 25px solid #333; /* 上向きに反転 */
+      border-bottom: 25px solid #333; /* 下向きに変更 */
       margin: 0 auto;
     }
     #result {
@@ -46,13 +46,12 @@
       font-weight: bold;
       color: #d33;
       background: #fff0f0;
-      border: 1px solid #d33; /* 実線に変更 */
+      border: none; /* 点線なし */
       padding: 10px;
-      margin-top: 25px;
+      margin-top: 30px; /* 余白広め */
       display: inline-block;
       animation: pop 0.6s ease;
-      border-radius: 8px; /* ← 角を丸くする */
-}
+      border-radius: 10px;
     }
     @keyframes pop {
       0% { transform: scale(0.8); opacity: 0; }
@@ -62,6 +61,12 @@
     button {
       padding: 10px 20px;
       margin-top: 10px;
+      border-radius: 12px;
+      border: none;
+      background: #ff6666;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
     }
   </style>
 </head>
@@ -118,7 +123,7 @@
       const slice = document.createElementNS("http://www.w3.org/2000/svg", "path");
       slice.setAttribute("d", pathData);
       slice.setAttribute("fill", colors[i % colors.length]);
-      slice.setAttribute("class", `slice${i}`); // ← ハイライト用クラス
+      slice.setAttribute("class", `slice${i}`);
       slices.appendChild(slice);
 
       // 円弧パス（ラベル用）→ 中心から70%の位置
@@ -157,7 +162,7 @@
       setTimeout(() => {
         const finalAngle = angle % 360;
         const index = Math.floor(finalAngle / sliceAngle);
-        const hitIndex = (outcomes.length - 1 - index) % outcomes.length;
+        const hitIndex = index % outcomes.length; // ← ポインターの真下に合わせる
         const outcome = outcomes[hitIndex];
 
         // 扇型ハイライト
