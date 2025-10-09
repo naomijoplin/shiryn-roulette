@@ -18,28 +18,20 @@
       margin: 20px auto;
       border-radius: 50%;
       border: 6px solid #333;
-      background: conic-gradient(
-        #f66 0deg 72deg,
-        #6c6 72deg 144deg,
-        #66f 144deg 216deg,
-        #fc6 216deg 288deg,
-        #c6f 288deg 360deg
-      );
       position: relative;
       transition: transform 3s ease-out;
     }
-    .label {
-      position: absolute;
-      width: 35%;
-      top: 50%;
-      left: 50%;
-      transform-origin: 0% 0%;
-      text-align: center;
+    svg {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+    }
+    text {
       font-size: clamp(9px, 2vw, 13px);
       font-weight: bold;
-      color: #fff;
-      line-height: 1.1;
-      word-break: break-word;
+      fill: #fff;
+      text-anchor: middle;
+      dominant-baseline: middle;
     }
     #pointer {
       width: 0; height: 0;
@@ -50,15 +42,6 @@
     }
     #result { font-size: 1.2em; margin-top: 15px; }
     button { padding: 10px 20px; margin-top: 10px; }
-
-    /* 📱 スマホ専用の微調整 */
-    @media (max-width: 480px) {
-      .label {
-        font-size: clamp(7px, 2.2vw, 11px);
-        width: 40%;
-        line-height: 1.0;
-      }
-    }
   </style>
 </head>
 <body>
@@ -67,7 +50,13 @@
   今はテスト用に何度でも回せます！</p>
 
   <div id="pointer"></div>
-  <div id="wheel"></div>
+  <div id="wheel">
+    <svg viewBox="0 0 200 200">
+      <defs id="paths"></defs>
+      <g id="slices"></g>
+      <g id="labels"></g>
+    </svg>
+  </div>
   <button onclick="spin()">ルーレットを回す</button>
   <div id="result"></div>
 
@@ -80,32 +69,49 @@
       'プチおかしプレゼント'
     ];
 
-    const wheel = document.getElementById('wheel');
     const sliceAngle = 360 / outcomes.length;
+    const radius = 100;
+    const paths = document.getElementById('paths');
+    const labels = document.getElementById('labels');
+    const slices = document.getElementById('slices');
 
-    // ラベルを配置（扇型の中央に水平補正）
     outcomes.forEach((text, i) => {
-      const label = document.createElement('div');
-      label.className = 'label';
-      label.textContent = text;
+      const startAngle = i * sliceAngle;
+      const endAngle = startAngle + sliceAngle;
+      const largeArc = sliceAngle > 180 ? 1 : 0;
 
-      const angle = i * sliceAngle + sliceAngle / 2;
-      label.style.transform =
-        `rotate(${angle}deg) translate(55%) rotate(${-angle + 90}deg)`;
+      // 扇型のパス（背景色）
+      const x1 = radius + radius * Math.cos(Math.PI * startAngle / 180);
+      const y1 = radius + radius * Math.sin(Math.PI * startAngle / 180);
+      const x2 = radius + radius * Math.cos(Math.PI * endAngle / 180);
+      const y2 = radius + radius * Math.sin(Math.PI * endAngle / 180);
 
-      wheel.appendChild(label);
-    });
+      const pathData = `
+        M ${radius},${radius}
+        L ${x1},${y1}
+        A ${radius},${radius} 0 ${largeArc} 1 ${x2},${y2}
+        Z
+      `;
 
-    function spin() {
-      const angle = Math.floor(Math.random() * 360) + 720;
-      wheel.style.transform = `rotate(${angle}deg)`;
-      setTimeout(() => {
-        const finalAngle = angle % 360;
-        const index = Math.floor(finalAngle / sliceAngle);
-        const outcome = outcomes[(outcomes.length - 1 - index) % outcomes.length];
-        document.getElementById('result').textContent = `結果：${outcome}`;
-      }, 3000);
-    }
-  </script>
-</body>
-</html>
+      const colors = ['#f66','#6c6','#66f','#fc6','#c6f','#6cf'];
+      const slice = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      slice.setAttribute("d", pathData);
+      slice.setAttribute("fill", colors[i % colors.length]);
+      slices.appendChild(slice);
+
+      // テキスト用の円弧パス
+      const arcPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      const arcId = `arc${i}`;
+      const midAngle = startAngle + sliceAngle / 2;
+      const arcX1 = radius + (radius * 0.6) * Math.cos(Math.PI * startAngle / 180);
+      const arcY1 = radius + (radius * 0.6) * Math.sin(Math.PI * startAngle / 180);
+      const arcX2 = radius + (radius * 0.6) * Math.cos(Math.PI * endAngle / 180);
+      const arcY2 = radius + (radius * 0.6) * Math.sin(Math.PI * endAngle / 180);
+
+      arcPath.setAttribute("d", `M ${arcX1},${arcY1} A ${radius*0.6},${radius*0.6} 0 ${largeArc} 1 ${arcX2},${arcY2}`);
+      arcPath.setAttribute("id", arcId);
+      paths.appendChild(arcPath);
+
+      // テキストを円弧に沿わせる
+      const textEl = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      const textPath = document.create
