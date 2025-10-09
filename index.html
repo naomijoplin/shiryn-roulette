@@ -50,6 +50,15 @@
     }
     #result { font-size: 1.2em; margin-top: 15px; }
     button { padding: 10px 20px; margin-top: 10px; }
+
+    /* 📱 スマホ専用の微調整 */
+    @media (max-width: 480px) {
+      .label {
+        font-size: clamp(7px, 2.2vw, 11px);
+        width: 40%;
+        line-height: 1.0;
+      }
+    }
   </style>
 </head>
 <body>
@@ -74,7 +83,7 @@
     const wheel = document.getElementById('wheel');
     const sliceAngle = 360 / outcomes.length;
 
-    // ラベルを配置
+    // ラベルを配置（扇型の中央に水平補正）
     outcomes.forEach((text, i) => {
       const label = document.createElement('div');
       label.className = 'label';
@@ -82,7 +91,7 @@
 
       const angle = i * sliceAngle + sliceAngle / 2;
       label.style.transform =
-        `rotate(${angle}deg) translate(55%) rotate(-${angle}deg)`;
+        `rotate(${angle}deg) translate(55%) rotate(${-angle}deg)`;
 
       wheel.appendChild(label);
     });
