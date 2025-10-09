@@ -33,17 +33,12 @@
       fill: #fff;
       text-anchor: middle;
     }
-    #pointer {
-  width: 0;
-  height: 0;
-  border-left: 20px solid transparent;
-  border-right: 20px solid transparent;
-  border-bottom: 30px solid #d33; /* 赤い下向き三角形 */
-  margin: -15px auto 0; /* 円に少し重ねる */
-  position: relative;
+   #pointer {
+  margin-top: -20px; /* 円に少し重ねる */
+  text-align: center;
   z-index: 10;
-  filter: drop-shadow(0 2px 2px rgba(0,0,0,0.3)); /* 影で立体感 */
-}
+    }
+
 
     #result {
       font-size: 1.4em;
@@ -79,7 +74,12 @@
   <p>このルーレットは <strong>2025年11月15日まで</strong> ご利用いただけます。<br>
   今はテスト用に何度でも回せます！</p>
 
-  <div id="pointer"></div>
+ <div id="pointer">
+  <svg width="30" height="30" viewBox="0 0 24 24">
+    <path d="M12 2v20M5 15l7 7 7-7" stroke="#d33" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+ </div>
+
   <div id="wheel">
     <svg viewBox="0 0 200 200">
       <defs id="paths"></defs>
@@ -164,11 +164,10 @@
       wheel.style.transform = `rotate(${angle}deg)`;
 
       setTimeout(() => {
-        const finalAngle = angle % 360;
-        const index = Math.floor(finalAngle / sliceAngle);
-        const hitIndex = index % outcomes.length; // ← ポインターの真下に合わせる
-        const outcome = outcomes[hitIndex];
-
+      const finalAngle = angle % 360;
+      const index = Math.floor(finalAngle / sliceAngle);
+      const hitIndex = (outcomes.length - 1 - index + outcomes.length) % outcomes.length;
+      const outcome = outcomes[hitIndex];
         // 扇型ハイライト
         document.querySelectorAll('path').forEach(p => p.style.opacity = '1');
         document.querySelector(`.slice${hitIndex}`).style.opacity = '0.6';
