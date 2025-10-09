@@ -112,7 +112,7 @@
 
     const wheel = document.getElementById('wheel');
 
-    // ラベルを扇型の中央に配置
+    // ラベルを扇型の中央に配置（水平補正付き）
     const sliceAngle = 360 / outcomes.length;
     outcomes.forEach((text, i) => {
       const label = document.createElement('div');
@@ -122,9 +122,9 @@
       // 扇型の中央角度を計算
       const angle = i * sliceAngle + sliceAngle / 2;
 
-      // その角度に配置し、文字を水平に戻す
+      // 扇型の中央に配置し、文字を水平に補正
       label.style.transform =
-        `rotate(${angle}deg) translate(60%) rotate(90deg)`;
+        `rotate(${angle}deg) translate(60%) rotate(-${angle}deg)`;
 
       wheel.appendChild(label);
     });
