@@ -33,22 +33,19 @@
       fill: #fff;
       text-anchor: middle;
     }
-  #pointer {
-  margin-top: -10px; /* 円に軽く重なる程度に調整 */
-  text-align: center;
-  z-index: 10;
-}
-
-
-
+    #pointer {
+      margin-top: -10px;
+      text-align: center;
+      z-index: 10;
+    }
     #result {
       font-size: 1.4em;
       font-weight: bold;
       color: #d33;
       background: #fff0f0;
-      border: none; /* 点線なし */
+      border: none;
       padding: 10px;
-      margin-top: 30px; /* 余白広め */
+      margin-top: 30px;
       display: inline-block;
       animation: pop 0.6s ease;
       border-radius: 10px;
@@ -75,12 +72,11 @@
   <p>このルーレットは <strong>2025年11月15日まで</strong> ご利用いただけます。<br>
   今はテスト用に何度でも回せます！</p>
 
-<div id="pointer">
-  <svg width="20" height="20" viewBox="0 0 24 24">
-    <path d="M12 2v20M5 15l7 7 7-7" stroke="#d33" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-  </svg>
-</div>
-
+  <div id="pointer">
+    <svg width="20" height="20" viewBox="0 0 24 24">
+      <path d="M12 2v20M5 15l7 7 7-7" stroke="#d33" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
 
   <div id="wheel">
     <svg viewBox="0 0 200 200">
@@ -89,6 +85,7 @@
       <g id="labels"></g>
     </svg>
   </div>
+
   <button onclick="spin()">ルーレットを回す</button>
   <div id="result"></div>
 
@@ -112,7 +109,6 @@
       const endAngle = startAngle + sliceAngle;
       const largeArc = sliceAngle > 180 ? 1 : 0;
 
-      // 扇型の背景
       const x1 = radius + radius * Math.cos(Math.PI * startAngle / 180);
       const y1 = radius + radius * Math.sin(Math.PI * startAngle / 180);
       const x2 = radius + radius * Math.cos(Math.PI * endAngle / 180);
@@ -132,7 +128,6 @@
       slice.setAttribute("class", `slice${i}`);
       slices.appendChild(slice);
 
-      // 円弧パス（ラベル用）→ 中心から70%の位置
       const arcPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
       const arcId = `arc${i}`;
       const arcX1 = radius + (radius * 0.7) * Math.cos(Math.PI * startAngle / 180);
@@ -144,7 +139,6 @@
       arcPath.setAttribute("id", arcId);
       paths.appendChild(arcPath);
 
-      // ラベルを複数行で描画
       lines.forEach((lineText, lineIndex) => {
         const textEl = document.createElementNS("http://www.w3.org/2000/svg", "text");
         const dy = -14 + lineIndex * 13;
@@ -166,17 +160,17 @@
       wheel.style.transform = `rotate(${angle}deg)`;
 
       setTimeout(() => {
-      const finalAngle = angle % 360;
-      const index = Math.floor(finalAngle / sliceAngle);
-      const hitIndex = (outcomes.length - 1 - index + outcomes.length) % outcomes.length;
-      const outcome = outcomes[hitIndex];
-        // 扇型ハイライト
+        const finalAngle = angle % 360;
+        const index = Math.floor(finalAngle / sliceAngle);
+        const hitIndex = index % outcomes.length;
+
+        const outcome = outcomes[hitIndex];
+
         document.querySelectorAll('path').forEach(p => p.style.opacity = '1');
         document.querySelector(`.slice${hitIndex}`).style.opacity = '0.6';
 
-        // 結果表示（ポップ演出）
         const resultEl = document.getElementById('result');
-        resultEl.textContent = `結果：${outcome.join(' ')}`;
+        resultEl.textContent = `🎯 結果：${outcome.join(' ')}`;
         resultEl.style.animation = 'none';
         void resultEl.offsetWidth;
         resultEl.style.animation = 'pop 0.6s ease';
