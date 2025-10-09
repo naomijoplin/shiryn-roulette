@@ -33,22 +33,19 @@
       position: relative;
       transition: transform 3s ease-out;
     }
-   .label {
-  position: absolute;
-  width: 30%;              /* ← さらに狭める */
-  height: 30%;             /* ← 高さも縮める */
-  top: 50%;
-  left: 50%;
-  transform-origin: 0% 0%;
-  text-align: center;
-  font-size: clamp(9px, 2vw, 12px); /* ← 画面に応じて自動調整 */
-  font-weight: bold;
-  color: #fff;
-  line-height: 1.1;        /* ← 行間を詰める */
-  word-break: break-word;  /* ← 長い単語も折り返す */
-}
-
-
+    .label {
+      position: absolute;
+      width: 40%;
+      top: 50%;
+      left: 50%;
+      transform-origin: 0% 0%;
+      text-align: center;
+      font-size: clamp(9px, 2vw, 13px);
+      font-weight: bold;
+      color: #fff;
+      line-height: 1.2;
+      word-break: break-word;
+    }
     #pointer {
       width: 0; height: 0;
       border-left: 15px solid transparent;
@@ -87,7 +84,7 @@
 <body>
   <h1>🎉 シーリン2周年 運試しルーレット 🎉</h1>
   <p>このルーレットは <strong>2025年11月15日まで</strong> ご利用いただけます。<br>
-  1日1回の運試し、ぜひ挑戦してください！</p>
+  今はテスト用に何度でも回せます！</p>
 
   <div id="pointer"></div>
   <div id="wheel"></div>
@@ -103,6 +100,7 @@
   <audio id="loseSound" src="https://www.soundjay.com/button/sounds/button-10.mp3"></audio>
 
   <script>
+    // 景品リスト
     const outcomes = [
       'ハイボール or レモンサワー無料',
       'オリジナルノンアルカクテル',
@@ -114,11 +112,20 @@
 
     const wheel = document.getElementById('wheel');
 
+    // ラベルを扇型の中央に配置
+    const sliceAngle = 360 / outcomes.length;
     outcomes.forEach((text, i) => {
       const label = document.createElement('div');
       label.className = 'label';
       label.textContent = text;
-      label.style.transform = `rotate(${i * (360 / outcomes.length)}deg) translate(50%) rotate(90deg)`;
+
+      // 扇型の中央角度を計算
+      const angle = i * sliceAngle + sliceAngle / 2;
+
+      // その角度に配置し、文字を水平に戻す
+      label.style.transform =
+        `rotate(${angle}deg) translate(60%) rotate(90deg)`;
+
       wheel.appendChild(label);
     });
 
@@ -126,20 +133,22 @@
       const result = document.getElementById('result');
       const now = Date.now();
 
+      // 期限チェック
       const deadline = new Date('2025-11-15T23:59:59').getTime();
       if (now > deadline) {
         alert('このルーレットの開催期間は終了しました。ご参加ありがとうございました！');
         return;
       }
 
-     // const lastSpin = localStorage.getItem('lastSpin');
-// if (lastSpin && now - lastSpin < 24 * 60 * 60 * 1000) {
-//   alert('ルーレットは24時間に1回しか回せません。また明日お試しください！');
-//   return;
-// }
-// localStorage.setItem('lastSpin', now);
+      // ★ テスト用に1日1回制限はコメントアウト済み ★
+      // const lastSpin = localStorage.getItem('lastSpin');
+      // if (lastSpin && now - lastSpin < 24 * 60 * 60 * 1000) {
+      //   alert('ルーレットは24時間に1回しか回せません。また明日お試しください！');
+      //   return;
+      // }
+      // localStorage.setItem('lastSpin', now);
 
-
+      // 回転処理
       const angle = Math.floor(Math.random() * 360) + 720;
       wheel.style.transform = `rotate(${angle}deg)`;
 
@@ -171,6 +180,7 @@
       }, 3000);
     }
 
+    // 紙吹雪を生成
     function launchConfetti() {
       for (let i = 0; i < 60; i++) {
         const confetti = document.createElement('div');
