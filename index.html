@@ -1,43 +1,142 @@
-<script>
-  const outcomes = [
-    ['ハイボール', 'or', 'レモンサワー無料'],
-    ['オリジナル', 'ノンアルカクテル', '無料'],
-    ['プチ', 'デザートサービス'],
-    ['店長おすすめ', '一品', 'サービス'],
-    ['プチおかし', 'プレゼント']
-  ];
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>シーリン運試しルーレット</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      text-align: center;
+      font-family: 'M PLUS Rounded 1c', sans-serif;
+      background: #fff8f0;
+      margin: 0;
+      padding: 10px;
+    }
+    #wheel {
+      width: 90vw; max-width: 320px;
+      height: 90vw; max-height: 320px;
+      margin: 20px auto;
+      border-radius: 50%;
+      border: 6px solid #333;
+      position: relative;
+      transition: transform 3s ease-out;
+    }
+    svg {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+    }
+    text {
+      font-size: clamp(8px, 1.4vw, 12px);
+      font-weight: bold;
+      fill: #fff;
+      text-anchor: middle;
+    }
+    #pointer {
+      width: 0; height: 0;
+      border-left: 15px solid transparent;
+      border-right: 15px solid transparent;
+      border-bottom: 25px solid #333;
+      margin: 0 auto;
+    }
+    #result { font-size: 1.2em; margin-top: 15px; }
+    button { padding: 10px 20px; margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <h1>🎉 シーリン2周年 運試しルーレット 🎉</h1>
+  <p>このルーレットは <strong>2025年11月15日まで</strong> ご利用いただけます。<br>
+  今はテスト用に何度でも回せます！</p>
 
-  const sliceAngle = 360 / outcomes.length;
-  const radius = 100;
-  const paths = document.getElementById('paths');
-  const labels = document.getElementById('labels');
-  const slices = document.getElementById('slices');
+  <div id="pointer"></div>
+  <div id="wheel">
+    <svg viewBox="0 0 200 200">
+      <defs id="paths"></defs>
+      <g id="slices"></g>
+      <g id="labels"></g>
+    </svg>
+  </div>
+  <button onclick="spin()">ルーレットを回す</button>
+  <div id="result"></div>
 
-  outcomes.forEach((lines, i) => {
-    const startAngle = i * sliceAngle;
-    const endAngle = startAngle + sliceAngle;
-    const largeArc = sliceAngle > 180 ? 1 : 0;
+  <script>
+    const outcomes = [
+      ['ハイボール', 'or', 'レモンサワー無料'],
+      ['オリジナル', 'ノンアルカクテル', '無料'],
+      ['プチ', 'デザートサービス'],
+      ['店長おすすめ', '一品', 'サービス'],
+      ['プチおかし', 'プレゼント']
+    ];
 
-    // 扇型の背景
-    const x1 = radius + radius * Math.cos(Math.PI * startAngle / 180);
-    const y1 = radius + radius * Math.sin(Math.PI * startAngle / 180);
-    const x2 = radius + radius * Math.cos(Math.PI * endAngle / 180);
-    const y2 = radius + radius * Math.sin(Math.PI * endAngle / 180);
+    const sliceAngle = 360 / outcomes.length;
+    const radius = 100;
+    const paths = document.getElementById('paths');
+    const labels = document.getElementById('labels');
+    const slices = document.getElementById('slices');
 
-    const pathData = `
-      M ${radius},${radius}
-      L ${x1},${y1}
-      A ${radius},${radius} 0 ${largeArc} 1 ${x2},${y2}
-      Z
-    `;
+    outcomes.forEach((lines, i) => {
+      const startAngle = i * sliceAngle;
+      const endAngle = startAngle + sliceAngle;
+      const largeArc = sliceAngle > 180 ? 1 : 0;
 
-    const colors = ['#f66','#6c6','#66f','#fc6','#c6f','#6cf'];
-    const slice = document.createElementNS("http://www.w3.org/2000/svg", "path");
-    slice.setAttribute("d", pathData);
-    slice.setAttribute("fill", colors[i % colors.length]);
-    slices.appendChild(slice);
+      // 扇型の背景
+      const x1 = radius + radius * Math.cos(Math.PI * startAngle / 180);
+      const y1 = radius + radius * Math.sin(Math.PI * startAngle / 180);
+      const x2 = radius + radius * Math.cos(Math.PI * endAngle / 180);
+      const y2 = radius + radius * Math.sin(Math.PI * endAngle / 180);
 
-    // 円弧パス（ラベル用）→ 中心から75%の位置
-    const arcPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
-    const arcId = `arc${i}`;
-    const arcX1 = radius + (radius * 0.75) * Math.cos(Math.PI * startAngle / 180);
+      const pathData = `
+        M ${radius},${radius}
+        L ${x1},${y1}
+        A ${radius},${radius} 0 ${largeArc} 1 ${x2},${y2}
+        Z
+      `;
+
+      const colors = ['#f66','#6c6','#66f','#fc6','#c6f','#6cf'];
+      const slice = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      slice.setAttribute("d", pathData);
+      slice.setAttribute("fill", colors[i % colors.length]);
+      slices.appendChild(slice);
+
+      // 円弧パス（ラベル用）→ 中心から75%の位置
+      const arcPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      const arcId = `arc${i}`;
+      const arcX1 = radius + (radius * 0.75) * Math.cos(Math.PI * startAngle / 180);
+      const arcY1 = radius + (radius * 0.75) * Math.sin(Math.PI * startAngle / 180);
+      const arcX2 = radius + (radius * 0.75) * Math.cos(Math.PI * endAngle / 180);
+      const arcY2 = radius + (radius * 0.75) * Math.sin(Math.PI * endAngle / 180);
+
+      arcPath.setAttribute("d", `M ${arcX1},${arcY1} A ${radius*0.75},${radius*0.75} 0 ${largeArc} 1 ${arcX2},${arcY2}`);
+      arcPath.setAttribute("id", arcId);
+      paths.appendChild(arcPath);
+
+      // ラベルを複数行で描画
+      lines.forEach((lineText, lineIndex) => {
+        const textEl = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        const dy = -6 + lineIndex * 7;
+        textEl.setAttribute("dy", dy.toString());
+
+        const textPath = document.createElementNS("http://www.w3.org/2000/svg", "textPath");
+        textPath.setAttribute("href", `#${arcId}`);
+        textPath.setAttribute("startOffset", "50%");
+        textPath.textContent = lineText;
+
+        textEl.appendChild(textPath);
+        labels.appendChild(textEl);
+      });
+    });
+
+    function spin() {
+      const wheel = document.getElementById('wheel');
+      const angle = Math.floor(Math.random() * 360) + 720;
+      wheel.style.transform = `rotate(${angle}deg)`;
+      setTimeout(() => {
+        const finalAngle = angle % 360;
+        const index = Math.floor(finalAngle / sliceAngle);
+        const outcome = outcomes[(outcomes.length - 1 - index) % outcomes.length];
+        document.getElementById('result').textContent = `結果：${outcome.join(' ')}`;
+      }, 3000);
+    }
+  </script>
+</body>
+</html>
