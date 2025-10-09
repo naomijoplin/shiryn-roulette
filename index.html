@@ -33,19 +33,21 @@
       position: relative;
       transition: transform 3s ease-out;
     }
-    .label {
-      position: absolute;
-      width: 50%;
-      height: 50%;
-      top: 50%;
-      left: 50%;
-      transform-origin: 0% 0%;
-      text-align: center;
-      font-size: 3vw;
-      font-weight: bold;
-      color: #fff;
-      word-break: keep-all;
-    }
+   .label {
+  position: absolute;
+  width: 40%;              /* ← 少し狭める */
+  height: 40%;             /* ← 高さも調整 */
+  top: 50%;
+  left: 50%;
+  transform-origin: 0% 0%;
+  text-align: center;
+  font-size: clamp(10px, 2.5vw, 14px); /* ← 画面に応じて自動調整 */
+  font-weight: bold;
+  color: #fff;
+  line-height: 1.2;        /* ← 行間を詰めて収まりやすく */
+  word-break: keep-all;
+}
+
     #pointer {
       width: 0; height: 0;
       border-left: 15px solid transparent;
