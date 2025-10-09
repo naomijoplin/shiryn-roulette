@@ -4,24 +4,40 @@
   <meta charset="UTF-8">
   <title>シーリン運試しルーレット</title>
   <style>
-    body { text-align: center; font-family: sans-serif; background: #fff8f0; overflow: hidden; }
+    body {
+      text-align: center;
+      font-family: 'M PLUS Rounded 1c', sans-serif;
+      background: #fff8f0;
+      overflow: hidden;
+    }
     #wheel {
-      width: 300px; height: 300px;
+      width: 320px; height: 320px;
       margin: 30px auto;
       border-radius: 50%;
       border: 8px solid #333;
+      background: conic-gradient(
+        #f66 0deg 60deg,
+        #6c6 60deg 120deg,
+        #66f 120deg 180deg,
+        #fc6 180deg 240deg,
+        #6cf 240deg 300deg,
+        #c6f 300deg 360deg
+      );
       position: relative;
       transform: rotate(0deg);
       transition: transform 3s ease-out;
     }
-    .segment {
-      width: 50%; height: 100%;
+    .label {
       position: absolute;
-      top: 0; left: 50%;
-      transform-origin: left center;
-      font-size: 14px; color: #fff;
-      line-height: 300px; text-align: center;
-      border-top-right-radius: 100% 100%;
+      width: 50%;
+      height: 50%;
+      top: 50%;
+      left: 50%;
+      transform-origin: 0% 0%;
+      text-align: center;
+      font-size: 14px;
+      font-weight: bold;
+      color: #fff;
     }
     #pointer {
       width: 0; height: 0;
@@ -34,9 +50,7 @@
     button { padding: 10px 20px; font-size: 18px; }
 
     /* 当たり演出用の点滅 */
-    .flash {
-      animation: flash 0.5s alternate 6;
-    }
+    .flash { animation: flash 0.5s alternate 6; }
     @keyframes flash {
       from { background: #fff8f0; }
       to { background: #ffff99; }
@@ -46,7 +60,7 @@
     .confetti {
       position: fixed;
       width: 10px; height: 10px;
-      background: red;
+      border-radius: 50%;
       top: -10px;
       animation: fall 3s linear forwards;
     }
@@ -88,16 +102,14 @@
     ];
 
     const wheel = document.getElementById('wheel');
-    wheel.innerHTML = '';
 
-    // セグメントを自動生成
+    // ラベルを配置
     outcomes.forEach((text, i) => {
-      const segment = document.createElement('div');
-      segment.className = 'segment';
-      segment.textContent = text;
-      segment.style.background = i % 2 === 0 ? '#f66' : '#6c6';
-      segment.style.transform = `rotate(${i * (360 / outcomes.length)}deg)`;
-      wheel.appendChild(segment);
+      const label = document.createElement('div');
+      label.className = 'label';
+      label.textContent = text;
+      label.style.transform = `rotate(${i * (360 / outcomes.length)}deg) translate(60px) rotate(${90}deg)`;
+      wheel.appendChild(label);
     });
 
     function spin() {
@@ -129,37 +141,32 @@
         const outcome = outcomes[(outcomes.length - 1 - index) % outcomes.length];
         result.textContent = `結果：${outcome}`;
 
-        // 当たり演出を種類ごとに変更
-        if (outcome.includes('ハイボール') || outcome.includes('レモンサワー')) {
-          document.getElementById('cheers').play();
-          launchConfetti();
-        } else if (outcome.includes('ノンアルカクテル')) {
-          document.getElementById('chime').play();
-          launchConfetti();
-        } else if (outcome.includes('デザート')) {
-          document.getElementById('bell').play();
-          launchConfetti();
-        } else if (outcome.includes('おすすめ')) {
-          document.getElementById('fanfare').play();
-          launchConfetti();
-        } else if (outcome.includes('おかし')) {
-          document.getElementById('pop').play();
-          launchConfetti();
-        } else {
+        // 当たり演出
+        if (outcome.includes('はずれ')) {
           document.getElementById('loseSound').play();
-        }
-
-        // 背景点滅は当たりのときだけ
-        if (!outcome.includes('はずれ')) {
+        } else {
+          launchConfetti();
           document.body.classList.add('flash');
           setTimeout(() => document.body.classList.remove('flash'), 3000);
+
+          if (outcome.includes('ハイボール') || outcome.includes('レモンサワー')) {
+            document.getElementById('cheers').play();
+          } else if (outcome.includes('ノンアルカクテル')) {
+            document.getElementById('chime').play();
+          } else if (outcome.includes('デザート')) {
+            document.getElementById('bell').play();
+          } else if (outcome.includes('おすすめ')) {
+            document.getElementById('fanfare').play();
+          } else if (outcome.includes('おかし')) {
+            document.getElementById('pop').play();
+          }
         }
       }, 3000);
     }
 
     // 紙吹雪を生成
     function launchConfetti() {
-      for (let i = 0; i < 50; i++) {
+      for (let i = 0; i < 60; i++) {
         const confetti = document.createElement('div');
         confetti.className = 'confetti';
         confetti.style.left = Math.random() * window.innerWidth + 'px';
