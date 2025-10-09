@@ -113,7 +113,7 @@
       // ラベルを複数行で描画
       lines.forEach((lineText, lineIndex) => {
         const textEl = document.createElementNS("http://www.w3.org/2000/svg", "text");
-        const dy = -6 + lineIndex * 7;
+        const dy = -10 + lineIndex * 12;
         textEl.setAttribute("dy", dy.toString());
 
         const textPath = document.createElementNS("http://www.w3.org/2000/svg", "textPath");
