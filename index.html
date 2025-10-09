@@ -12,18 +12,16 @@
       margin: 0;
       padding: 10px;
     }
-   #wheel {
-  width: 90vw;
-  max-width: 320px;
-  height: 90vw;
-  max-height: 320px;
-  margin: 20px auto;
-  border-radius: 50%;
-  /* border: 6px solid #333; ← 削除またはコメントアウト */
-  position: relative;
-  transition: transform 3s ease-out;
-}
-
+    #wheel {
+      width: 90vw;
+      max-width: 320px;
+      height: 90vw;
+      max-height: 320px;
+      margin: 20px auto;
+      border-radius: 50%;
+      position: relative;
+      transition: transform 3s ease-out;
+    }
     svg {
       width: 100%;
       height: 100%;
@@ -36,14 +34,33 @@
       text-anchor: middle;
     }
     #pointer {
-      width: 0; height: 0;
+      width: 0;
+      height: 0;
       border-left: 15px solid transparent;
       border-right: 15px solid transparent;
-      border-bottom: 25px solid #333;
+      border-top: 25px solid #333; /* 上向きに反転 */
       margin: 0 auto;
     }
-    #result { font-size: 1.2em; margin-top: 15px; }
-    button { padding: 10px 20px; margin-top: 10px; }
+    #result {
+      font-size: 1.4em;
+      font-weight: bold;
+      color: #d33;
+      background: #fff0f0;
+      border: 2px dashed #d33;
+      padding: 10px;
+      margin-top: 15px;
+      display: inline-block;
+      animation: pop 0.6s ease;
+    }
+    @keyframes pop {
+      0% { transform: scale(0.8); opacity: 0; }
+      50% { transform: scale(1.1); opacity: 1; }
+      100% { transform: scale(1); }
+    }
+    button {
+      padding: 10px 20px;
+      margin-top: 10px;
+    }
   </style>
 </head>
 <body>
@@ -63,13 +80,13 @@
   <div id="result"></div>
 
   <script>
-   const outcomes = [
-  ['ハイボール', 'or', 'レモンサワー', '無料'],
-  ['オリジナル', 'ノンアルカクテル','無料'],
-  ['プチ', 'デザートサービス'],
-  ['店長おすすめ', '一品','サービス'],
-  ['プチおかし', 'プレゼント']
-];
+    const outcomes = [
+      ['ハイボール', 'or', 'レモンサワー', '無料'],
+      ['オリジナル', 'ノンアルカクテル','無料'],
+      ['プチ', 'デザートサービス'],
+      ['店長おすすめ', '一品','サービス'],
+      ['プチおかし', 'プレゼント']
+    ];
 
     const sliceAngle = 360 / outcomes.length;
     const radius = 100;
@@ -99,9 +116,10 @@
       const slice = document.createElementNS("http://www.w3.org/2000/svg", "path");
       slice.setAttribute("d", pathData);
       slice.setAttribute("fill", colors[i % colors.length]);
+      slice.setAttribute("class", `slice${i}`); // ← ハイライト用クラス
       slices.appendChild(slice);
 
-      // 円弧パス（ラベル用）→ 中心から75%の位置
+      // 円弧パス（ラベル用）→ 中心から70%の位置
       const arcPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
       const arcId = `arc${i}`;
       const arcX1 = radius + (radius * 0.7) * Math.cos(Math.PI * startAngle / 180);
@@ -133,11 +151,23 @@
       const wheel = document.getElementById('wheel');
       const angle = Math.floor(Math.random() * 360) + 720;
       wheel.style.transform = `rotate(${angle}deg)`;
+
       setTimeout(() => {
         const finalAngle = angle % 360;
         const index = Math.floor(finalAngle / sliceAngle);
-        const outcome = outcomes[(outcomes.length - 1 - index) % outcomes.length];
-        document.getElementById('result').textContent = `結果：${outcome.join(' ')}`;
+        const hitIndex = (outcomes.length - 1 - index) % outcomes.length;
+        const outcome = outcomes[hitIndex];
+
+        // 扇型ハイライト
+        document.querySelectorAll('path').forEach(p => p.style.opacity = '1');
+        document.querySelector(`.slice${hitIndex}`).style.opacity = '0.6';
+
+        // 結果表示（ポップ演出）
+        const resultEl = document.getElementById('result');
+        resultEl.textContent = `結果：${outcome.join(' ')}`;
+        resultEl.style.animation = 'none';
+        void resultEl.offsetWidth;
+        resultEl.style.animation = 'pop 0.6s ease';
       }, 3000);
     }
   </script>
