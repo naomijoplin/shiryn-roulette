@@ -101,10 +101,10 @@
       // 円弧パス（ラベル用）→ 中心から75%の位置
       const arcPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
       const arcId = `arc${i}`;
-      const arcX1 = radius + (radius * 0.75) * Math.cos(Math.PI * startAngle / 180);
-      const arcY1 = radius + (radius * 0.75) * Math.sin(Math.PI * startAngle / 180);
-      const arcX2 = radius + (radius * 0.75) * Math.cos(Math.PI * endAngle / 180);
-      const arcY2 = radius + (radius * 0.75) * Math.sin(Math.PI * endAngle / 180);
+      const arcX1 = radius + (radius * 0.7) * Math.cos(Math.PI * startAngle / 180);
+      const arcY1 = radius + (radius * 0.7) * Math.sin(Math.PI * startAngle / 180);
+      const arcX2 = radius + (radius * 0.7) * Math.cos(Math.PI * endAngle / 180);
+      const arcY2 = radius + (radius * 0.7) * Math.sin(Math.PI * endAngle / 180);
 
       arcPath.setAttribute("d", `M ${arcX1},${arcY1} A ${radius*0.75},${radius*0.75} 0 ${largeArc} 1 ${arcX2},${arcY2}`);
       arcPath.setAttribute("id", arcId);
