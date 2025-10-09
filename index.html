@@ -186,10 +186,15 @@
         });
 
         const hitSlice = document.querySelector(`.slice${hitIndex}`);
-        hitSlice.style.fill = '#d33';
-      
-        hitSlice.style.strokeWidth = '3';
-        hitSlice.style.filter = 'drop-shadow(0 0 6px #f00)';
+       hitSlice.style.fill = '#ff0'; // 黄色で目立たせる
+       hitSlice.style.stroke = '#d33'; // 赤枠
+       hitSlice.style.strokeWidth = '3';
+       hitSlice.style.filter = `
+  drop-shadow(-4px 0 6px #f00)
+  drop-shadow(4px 0 6px #f00)
+  drop-shadow(0 0 10px #ff0)
+`;
+
         hitSlice.style.animation = 'flash 1s ease infinite';
 
         const resultEl = document.getElementById('result');
