@@ -34,13 +34,17 @@
       text-anchor: middle;
     }
     #pointer {
-      width: 0;
-      height: 0;
-      border-left: 15px solid transparent;
-      border-right: 15px solid transparent;
-      border-bottom: 25px solid #333; /* 下向きに変更 */
-      margin: 0 auto;
-    }
+  width: 0;
+  height: 0;
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+  border-bottom: 30px solid #d33; /* 赤い下向き三角形 */
+  margin: -15px auto 0; /* 円に少し重ねる */
+  position: relative;
+  z-index: 10;
+  filter: drop-shadow(0 2px 2px rgba(0,0,0,0.3)); /* 影で立体感 */
+}
+
     #result {
       font-size: 1.4em;
       font-weight: bold;
