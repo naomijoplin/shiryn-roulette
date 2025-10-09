@@ -10,23 +10,16 @@
       background: #fff8f0;
       overflow: hidden;
     }
-    #wheel {
-      width: 320px; height: 320px;
-      margin: 30px auto;
-      border-radius: 50%;
-      border: 8px solid #333;
-      background: conic-gradient(
-        #f66 0deg 60deg,
-        #6c6 60deg 120deg,
-        #66f 120deg 180deg,
-        #fc6 180deg 240deg,
-        #6cf 240deg 300deg,
-        #c6f 300deg 360deg
-      );
-      position: relative;
-      transform: rotate(0deg);
-      transition: transform 3s ease-out;
-    }
+   #wheel {
+  width: 300px; height: 300px;
+  margin: 30px auto;
+  border-radius: 50%;
+  border: 8px solid #333;
+  position: relative;
+  transform: rotate(0deg);   /* ← この行を削除 */
+  transition: transform 3s ease-out;
+}
+
     .label {
       position: absolute;
       width: 50%;
