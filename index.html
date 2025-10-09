@@ -168,3 +168,24 @@
 
         document.querySelectorAll('path').forEach(p => {
           p.style.opacity = '1';
+          p.style.stroke = 'none';
+          p.style.filter = 'none';
+        });
+
+        const hitSlice = document.querySelector(`.slice${hitIndex}`);
+        hitSlice.style.fill = '#ff0';
+        hitSlice.style.stroke = '#d33';
+        hitSlice.style.strokeWidth = '3';
+        hitSlice.style.filter = 'drop-shadow(0 0 6px #f00)';
+        hitSlice.style.animation = 'flash 1s ease infinite';
+
+        const resultEl = document.getElementById('result');
+        resultEl.innerHTML = `🎯 結果：<br>${outcome.join(' ')}`;
+        resultEl.style.animation = 'none';
+        void resultEl.offsetWidth;
+        resultEl.style.animation = 'pop 0.6s ease';
+      }, 3000);
+    }
+  </script>
+</body>
+</html>
