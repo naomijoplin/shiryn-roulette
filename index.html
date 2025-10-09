@@ -27,11 +27,10 @@
       border-radius: 50%;
     }
     text {
-      font-size: clamp(9px, 2vw, 13px);
+      font-size: clamp(8px, 1.5vw, 12px);
       font-weight: bold;
       fill: #fff;
       text-anchor: middle;
-      dominant-baseline: middle;
     }
     #pointer {
       width: 0; height: 0;
@@ -61,12 +60,13 @@
   <div id="result"></div>
 
   <script>
+    // 景品名を2行に分割
     const outcomes = [
-      'ハイボール or レモンサワー無料',
-      'オリジナルノンアルカクテル',
-      'プチデザートサービス',
-      '店長おすすめ一品',
-      'プチおかしプレゼント'
+      ['ハイボール or', 'レモンサワー無料'],
+      ['オリジナル', 'ノンアルカクテル'],
+      ['プチ', 'デザートサービス'],
+      ['店長おすすめ', '一品'],
+      ['プチおかし', 'プレゼント']
     ];
 
     const sliceAngle = 360 / outcomes.length;
@@ -75,7 +75,7 @@
     const labels = document.getElementById('labels');
     const slices = document.getElementById('slices');
 
-    outcomes.forEach((text, i) => {
+    outcomes.forEach((lines, i) => {
       const startAngle = i * sliceAngle;
       const endAngle = startAngle + sliceAngle;
       const largeArc = sliceAngle > 180 ? 1 : 0;
@@ -99,26 +99,37 @@
       slice.setAttribute("fill", colors[i % colors.length]);
       slices.appendChild(slice);
 
-      // テキスト用の円弧パス
+      // 円弧パス（ラベル用）
       const arcPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
       const arcId = `arc${i}`;
-      const arcX1 = radius + (radius * 0.6) * Math.cos(Math.PI * startAngle / 180);
-      const arcY1 = radius + (radius * 0.6) * Math.sin(Math.PI * startAngle / 180);
-      const arcX2 = radius + (radius * 0.6) * Math.cos(Math.PI * endAngle / 180);
-      const arcY2 = radius + (radius * 0.6) * Math.sin(Math.PI * endAngle / 180);
+      const arcX1 = radius + (radius * 0.5) * Math.cos(Math.PI * startAngle / 180);
+      const arcY1 = radius + (radius * 0.5) * Math.sin(Math.PI * startAngle / 180);
+      const arcX2 = radius + (radius * 0.5) * Math.cos(Math.PI * endAngle / 180);
+      const arcY2 = radius + (radius * 0.5) * Math.sin(Math.PI * endAngle / 180);
 
-      arcPath.setAttribute("d", `M ${arcX1},${arcY1} A ${radius*0.6},${radius*0.6} 0 ${largeArc} 1 ${arcX2},${arcY2}`);
+      arcPath.setAttribute("d", `M ${arcX1},${arcY1} A ${radius*0.5},${radius*0.5} 0 ${largeArc} 1 ${arcX2},${arcY2}`);
       arcPath.setAttribute("id", arcId);
       paths.appendChild(arcPath);
 
-      // テキストを円弧に沿わせる
-      const textEl = document.createElementNS("http://www.w3.org/2000/svg", "text");
-      const textPath = document.createElementNS("http://www.w3.org/2000/svg", "textPath");
-      textPath.setAttribute("href", `#${arcId}`);
-      textPath.setAttribute("startOffset", "50%");
-      textPath.textContent = text;
-      textEl.appendChild(textPath);
-      labels.appendChild(textEl);
+      // 1行目
+      const textEl1 = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      textEl1.setAttribute("dy", "-6");
+      const textPath1 = document.createElementNS("http://www.w3.org/2000/svg", "textPath");
+      textPath1.setAttribute("href", `#${arcId}`);
+      textPath1.setAttribute("startOffset", "50%");
+      textPath1.textContent = lines[0];
+      textEl1.appendChild(textPath1);
+      labels.appendChild(textEl1);
+
+      // 2行目
+      const textEl2 = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      textEl2.setAttribute("dy", "8");
+      const textPath2 = document.createElementNS("http://www.w3.org/2000/svg", "textPath");
+      textPath2.setAttribute("href", `#${arcId}`);
+      textPath2.setAttribute("startOffset", "50%");
+      textPath2.textContent = lines[1];
+      textEl2.appendChild(textPath2);
+      labels.appendChild(textEl2);
     });
 
     function spin() {
@@ -129,7 +140,7 @@
         const finalAngle = angle % 360;
         const index = Math.floor(finalAngle / sliceAngle);
         const outcome = outcomes[(outcomes.length - 1 - index) % outcomes.length];
-        document.getElementById('result').textContent = `結果：${outcome}`;
+        document.getElementById('result').textContent = `結果：${outcome.join(' ')}`;
       }, 3000);
     }
   </script>
