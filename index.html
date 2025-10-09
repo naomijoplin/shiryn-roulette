@@ -102,7 +102,6 @@
       // テキスト用の円弧パス
       const arcPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
       const arcId = `arc${i}`;
-      const midAngle = startAngle + sliceAngle / 2;
       const arcX1 = radius + (radius * 0.6) * Math.cos(Math.PI * startAngle / 180);
       const arcY1 = radius + (radius * 0.6) * Math.sin(Math.PI * startAngle / 180);
       const arcX2 = radius + (radius * 0.6) * Math.cos(Math.PI * endAngle / 180);
@@ -114,4 +113,25 @@
 
       // テキストを円弧に沿わせる
       const textEl = document.createElementNS("http://www.w3.org/2000/svg", "text");
-      const textPath = document.create
+      const textPath = document.createElementNS("http://www.w3.org/2000/svg", "textPath");
+      textPath.setAttribute("href", `#${arcId}`);
+      textPath.setAttribute("startOffset", "50%");
+      textPath.textContent = text;
+      textEl.appendChild(textPath);
+      labels.appendChild(textEl);
+    });
+
+    function spin() {
+      const wheel = document.getElementById('wheel');
+      const angle = Math.floor(Math.random() * 360) + 720;
+      wheel.style.transform = `rotate(${angle}deg)`;
+      setTimeout(() => {
+        const finalAngle = angle % 360;
+        const index = Math.floor(finalAngle / sliceAngle);
+        const outcome = outcomes[(outcomes.length - 1 - index) % outcomes.length];
+        document.getElementById('result').textContent = `結果：${outcome}`;
+      }, 3000);
+    }
+  </script>
+</body>
+</html>
