@@ -2,24 +2,27 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>肉とアジアンの酒場シーリン2周年記念</title>
+  <title>シーリン運試しルーレット</title>
   <style>
-    body { text-align: center; font-family: sans-serif; background: #fff8f0; }
-    #wheel { width: 300px; height: 300px; margin: 30px auto; border-radius: 50%; border: 8px solid #333; position: relative; }
-    .segment {
-      width: 50%;
-      height: 50%;
-      position: absolute;
-      top: 0;
-      left: 50%;
-      transform-origin: 0% 100%;
-      background: #f66;
-      color: #fff;
-      font-size: 20px;
-      line-height: 150px;
-      text-align: center;
+    body { text-align: center; font-family: sans-serif; background: #fff8f0; overflow: hidden; }
+    #wheel {
+      width: 300px; height: 300px;
+      margin: 30px auto;
+      border-radius: 50%;
+      border: 8px solid #333;
+      position: relative;
+      transform: rotate(0deg);
+      transition: transform 3s ease-out;
     }
-    .segment:nth-child(2) { transform: rotate(180deg); background: #6c6; }
+    .segment {
+      width: 50%; height: 100%;
+      position: absolute;
+      top: 0; left: 50%;
+      transform-origin: left center;
+      font-size: 14px; color: #fff;
+      line-height: 300px; text-align: center;
+      border-top-right-radius: 100% 100%;
+    }
     #pointer {
       width: 0; height: 0;
       border-left: 20px solid transparent;
@@ -29,99 +32,143 @@
     }
     #result { font-size: 24px; margin-top: 20px; }
     button { padding: 10px 20px; font-size: 18px; }
-    @media screen and (max-width: 600px) {
-  body {
-    font-size: 16px;
-    padding: 10px;
-  }
 
-  #wheel {
-    width: 200px;
-    height: 200px;
-  }
+    /* 当たり演出用の点滅 */
+    .flash {
+      animation: flash 0.5s alternate 6;
+    }
+    @keyframes flash {
+      from { background: #fff8f0; }
+      to { background: #ffff99; }
+    }
 
-  .segment {
-    font-size: 16px;
-    line-height: 100px;
-  }
-
-  button {
-    font-size: 16px;
-    padding: 8px 16px;
-  }
-
-  #result {
-    font-size: 20px;
-  }
-}
-
-
-
-
+    /* 紙吹雪 */
+    .confetti {
+      position: fixed;
+      width: 10px; height: 10px;
+      background: red;
+      top: -10px;
+      animation: fall 3s linear forwards;
+    }
+    @keyframes fall {
+      to {
+        transform: translateY(100vh) rotate(720deg);
+        opacity: 0;
+      }
+    }
   </style>
 </head>
 <body>
-  <h1>🎉肉とアジアンの酒場シーリン2周年記念🎉</h1>
-  <p>おかげさまで2周年！<br>
-  日頃の感謝を込めて、運試しルーレットをご用意しました🎡<br>
-  当たりが出たら、ちょっと嬉しい特典があるかも…？<br>
-  ぜひチャレンジしてみてください！
-</p>
-  <p style="margin-top: 20px; font-weight: bold;">
-このルーレットは【2025年11月15日まで】ご利用いただけます。<br>
-1日1回の運試し、ぜひ期間中にチャレンジしてください！
-</p>
+  <h1>🎉 シーリン2周年 運試しルーレット 🎉</h1>
+  <p>このルーレットは <strong>2025年11月15日まで</strong> ご利用いただけます。<br>
+  1日1回の運試し、ぜひ挑戦してください！</p>
 
   <div id="pointer"></div>
-  <div id="wheel">
-    <div class="segment" style="transform: rotate(0deg);">当たり</div>
-    <div class="segment" style="transform: rotate(180deg);">はずれ</div>
-  </div>
+  <div id="wheel"></div>
   <button onclick="spin()">ルーレットを回す</button>
   <div id="result"></div>
-<script>
-  .segment {
-  width: 50%;
-  height: 100%;
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform-origin: left center;
-  background: #f66;
-  color: #fff;
-  font-size: 20px;
-  line-height: 300px;
-  text-align: center;
-  border-top-right-radius: 100% 100%;
-}
-.segment:nth-child(2) {
-  transform: rotate(180deg);
-  background: #6c6;
-}
 
-function spin() {
-  // 期限チェック
-  const deadline = new Date('2025-11-15T23:59:59');
-  const now = new Date();
-  if (now > deadline) {
-    alert('このルーレットの開催期間は終了しました。ご参加ありがとうございました！');
-    return;
-  }
+  <!-- 効果音 -->
+  <audio id="cheers" src="https://www.soundjay.com/human/sounds/applause-8.mp3"></audio>
+  <audio id="chime" src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3"></audio>
+  <audio id="bell" src="https://www.soundjay.com/button/sounds/button-4.mp3"></audio>
+  <audio id="fanfare" src="https://www.soundjay.com/human/sounds/cheering-4.mp3"></audio>
+  <audio id="pop" src="https://www.soundjay.com/button/sounds/button-16.mp3"></audio>
+  <audio id="loseSound" src="https://www.soundjay.com/button/sounds/button-10.mp3"></audio>
 
-  // ルーレット処理
-  const wheel = document.getElementById('wheel');
-  const result = document.getElementById('result');
-  const angle = Math.floor(Math.random() * 360) + 720;
-  wheel.style.transition = 'transform 3s ease-out';
-  wheel.style.transform = `rotate(${angle}deg)`;
-  setTimeout(() => {
-    const finalAngle = angle % 360;
-    const outcome = finalAngle < 180 ? '当たり🎯' : 'はずれ💦';
-    result.textContent = `結果：${outcome}`;
-  }, 3000);
-}
-</script>
+  <script>
+    // 景品リスト
+    const outcomes = [
+      'ハイボール or レモンサワー無料',
+      'オリジナルノンアルカクテル',
+      'プチデザートサービス',
+      '店長おすすめ一品',
+      'プチおかしプレゼント',
+      'はずれ💦'
+    ];
 
+    const wheel = document.getElementById('wheel');
+    wheel.innerHTML = '';
 
+    // セグメントを自動生成
+    outcomes.forEach((text, i) => {
+      const segment = document.createElement('div');
+      segment.className = 'segment';
+      segment.textContent = text;
+      segment.style.background = i % 2 === 0 ? '#f66' : '#6c6';
+      segment.style.transform = `rotate(${i * (360 / outcomes.length)}deg)`;
+      wheel.appendChild(segment);
+    });
+
+    function spin() {
+      const result = document.getElementById('result');
+      const now = Date.now();
+
+      // 期限チェック
+      const deadline = new Date('2025-11-15T23:59:59').getTime();
+      if (now > deadline) {
+        alert('このルーレットの開催期間は終了しました。ご参加ありがとうございました！');
+        return;
+      }
+
+      // 1日1回制限
+      const lastSpin = localStorage.getItem('lastSpin');
+      if (lastSpin && now - lastSpin < 24 * 60 * 60 * 1000) {
+        alert('ルーレットは24時間に1回しか回せません。また明日お試しください！');
+        return;
+      }
+      localStorage.setItem('lastSpin', now);
+
+      // 回転処理
+      const angle = Math.floor(Math.random() * 360) + 720;
+      wheel.style.transform = `rotate(${angle}deg)`;
+
+      setTimeout(() => {
+        const finalAngle = angle % 360;
+        const index = Math.floor(finalAngle / (360 / outcomes.length));
+        const outcome = outcomes[(outcomes.length - 1 - index) % outcomes.length];
+        result.textContent = `結果：${outcome}`;
+
+        // 当たり演出を種類ごとに変更
+        if (outcome.includes('ハイボール') || outcome.includes('レモンサワー')) {
+          document.getElementById('cheers').play();
+          launchConfetti();
+        } else if (outcome.includes('ノンアルカクテル')) {
+          document.getElementById('chime').play();
+          launchConfetti();
+        } else if (outcome.includes('デザート')) {
+          document.getElementById('bell').play();
+          launchConfetti();
+        } else if (outcome.includes('おすすめ')) {
+          document.getElementById('fanfare').play();
+          launchConfetti();
+        } else if (outcome.includes('おかし')) {
+          document.getElementById('pop').play();
+          launchConfetti();
+        } else {
+          document.getElementById('loseSound').play();
+        }
+
+        // 背景点滅は当たりのときだけ
+        if (!outcome.includes('はずれ')) {
+          document.body.classList.add('flash');
+          setTimeout(() => document.body.classList.remove('flash'), 3000);
+        }
+      }, 3000);
+    }
+
+    // 紙吹雪を生成
+    function launchConfetti() {
+      for (let i = 0; i < 50; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        confetti.style.left = Math.random() * window.innerWidth + 'px';
+        confetti.style.background = `hsl(${Math.random() * 360}, 100%, 50%)`;
+        confetti.style.animationDuration = (2 + Math.random() * 3) + 's';
+        document.body.appendChild(confetti);
+        setTimeout(() => confetti.remove(), 5000);
+      }
+    }
+  </script>
 </body>
 </html>
