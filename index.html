@@ -40,10 +40,10 @@
       left: 50%;
       transform-origin: 0% 0%;
       text-align: center;
-      font-size: clamp(9px, 2vw, 13px);
+      font-size: clamp(8px, 1.8vw, 12px); /* ← スマホでも小さめに */
       font-weight: bold;
       color: #fff;
-      line-height: 1.2;
+      line-height: 1.1; /* ← 行間を詰める */
       word-break: break-word;
     }
     #pointer {
@@ -77,6 +77,15 @@
       to {
         transform: translateY(100vh) rotate(720deg);
         opacity: 0;
+      }
+    }
+
+    /* 📱 スマホ専用の微調整 */
+    @media (max-width: 480px) {
+      .label {
+        font-size: clamp(7px, 2.5vw, 11px);
+        width: 45%;          /* 少し広めにして収めやすく */
+        line-height: 1.0;    /* 行間をさらに詰める */
       }
     }
   </style>
@@ -124,7 +133,7 @@
 
       // 扇型の中央に配置し、文字を水平に補正
       label.style.transform =
-        `rotate(${angle}deg) translate(60%) rotate(-${angle}deg)`;
+        `rotate(${angle}deg) translate(50%) rotate(${-angle + 90}deg)`;
 
       wheel.appendChild(label);
     });
@@ -195,3 +204,4 @@
   </script>
 </body>
 </html>
+
