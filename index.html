@@ -131,12 +131,13 @@
         return;
       }
 
-      const lastSpin = localStorage.getItem('lastSpin');
-      if (lastSpin && now - lastSpin < 24 * 60 * 60 * 1000) {
-        alert('ルーレットは24時間に1回しか回せません。また明日お試しください！');
-        return;
-      }
-      localStorage.setItem('lastSpin', now);
+     // const lastSpin = localStorage.getItem('lastSpin');
+// if (lastSpin && now - lastSpin < 24 * 60 * 60 * 1000) {
+//   alert('ルーレットは24時間に1回しか回せません。また明日お試しください！');
+//   return;
+// }
+// localStorage.setItem('lastSpin', now);
+
 
       const angle = Math.floor(Math.random() * 360) + 720;
       wheel.style.transform = `rotate(${angle}deg)`;
