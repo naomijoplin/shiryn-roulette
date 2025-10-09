@@ -3,23 +3,36 @@
 <head>
   <meta charset="UTF-8">
   <title>シーリン運試しルーレット</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
       text-align: center;
       font-family: 'M PLUS Rounded 1c', sans-serif;
       background: #fff8f0;
-      overflow: hidden;
+      overflow-x: hidden;
+      margin: 0;
+      padding: 10px;
     }
-   #wheel {
-  width: 300px; height: 300px;
-  margin: 30px auto;
-  border-radius: 50%;
-  border: 8px solid #333;
-  position: relative;
-  transform: rotate(0deg);   /* ← この行を削除 */
-  transition: transform 3s ease-out;
-}
+    h1 { font-size: 1.5em; margin: 10px 0; }
+    p { font-size: 0.9em; }
 
+    #wheel {
+      width: 90vw; max-width: 320px;
+      height: 90vw; max-height: 320px;
+      margin: 20px auto;
+      border-radius: 50%;
+      border: 6px solid #333;
+      background: conic-gradient(
+        #f66 0deg 60deg,
+        #6c6 60deg 120deg,
+        #66f 120deg 180deg,
+        #fc6 180deg 240deg,
+        #6cf 240deg 300deg,
+        #c6f 300deg 360deg
+      );
+      position: relative;
+      transition: transform 3s ease-out;
+    }
     .label {
       position: absolute;
       width: 50%;
@@ -28,31 +41,34 @@
       left: 50%;
       transform-origin: 0% 0%;
       text-align: center;
-      font-size: 14px;
+      font-size: 3vw;
       font-weight: bold;
       color: #fff;
+      word-break: keep-all;
     }
     #pointer {
       width: 0; height: 0;
-      border-left: 20px solid transparent;
-      border-right: 20px solid transparent;
-      border-bottom: 30px solid #333;
+      border-left: 15px solid transparent;
+      border-right: 15px solid transparent;
+      border-bottom: 25px solid #333;
       margin: 0 auto;
     }
-    #result { font-size: 24px; margin-top: 20px; }
-    button { padding: 10px 20px; font-size: 18px; }
+    #result { font-size: 1.2em; margin-top: 15px; }
+    button {
+      padding: 10px 20px;
+      font-size: 1em;
+      margin-top: 10px;
+    }
 
-    /* 当たり演出用の点滅 */
     .flash { animation: flash 0.5s alternate 6; }
     @keyframes flash {
       from { background: #fff8f0; }
       to { background: #ffff99; }
     }
 
-    /* 紙吹雪 */
     .confetti {
       position: fixed;
-      width: 10px; height: 10px;
+      width: 8px; height: 8px;
       border-radius: 50%;
       top: -10px;
       animation: fall 3s linear forwards;
@@ -84,7 +100,6 @@
   <audio id="loseSound" src="https://www.soundjay.com/button/sounds/button-10.mp3"></audio>
 
   <script>
-    // 景品リスト
     const outcomes = [
       'ハイボール or レモンサワー無料',
       'オリジナルノンアルカクテル',
@@ -96,12 +111,11 @@
 
     const wheel = document.getElementById('wheel');
 
-    // ラベルを配置
     outcomes.forEach((text, i) => {
       const label = document.createElement('div');
       label.className = 'label';
       label.textContent = text;
-      label.style.transform = `rotate(${i * (360 / outcomes.length)}deg) translate(60px) rotate(${90}deg)`;
+      label.style.transform = `rotate(${i * (360 / outcomes.length)}deg) translate(35%) rotate(90deg)`;
       wheel.appendChild(label);
     });
 
@@ -109,14 +123,12 @@
       const result = document.getElementById('result');
       const now = Date.now();
 
-      // 期限チェック
       const deadline = new Date('2025-11-15T23:59:59').getTime();
       if (now > deadline) {
         alert('このルーレットの開催期間は終了しました。ご参加ありがとうございました！');
         return;
       }
 
-      // 1日1回制限
       const lastSpin = localStorage.getItem('lastSpin');
       if (lastSpin && now - lastSpin < 24 * 60 * 60 * 1000) {
         alert('ルーレットは24時間に1回しか回せません。また明日お試しください！');
@@ -124,7 +136,6 @@
       }
       localStorage.setItem('lastSpin', now);
 
-      // 回転処理
       const angle = Math.floor(Math.random() * 360) + 720;
       wheel.style.transform = `rotate(${angle}deg)`;
 
@@ -134,7 +145,6 @@
         const outcome = outcomes[(outcomes.length - 1 - index) % outcomes.length];
         result.textContent = `結果：${outcome}`;
 
-        // 当たり演出
         if (outcome.includes('はずれ')) {
           document.getElementById('loseSound').play();
         } else {
@@ -157,7 +167,6 @@
       }, 3000);
     }
 
-    // 紙吹雪を生成
     function launchConfetti() {
       for (let i = 0; i < 60; i++) {
         const confetti = document.createElement('div');
