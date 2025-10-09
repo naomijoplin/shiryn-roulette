@@ -91,7 +91,7 @@
 
       const angle = i * sliceAngle + sliceAngle / 2;
       label.style.transform =
-        `rotate(${angle}deg) translate(55%) rotate(${-angle}deg)`;
+        `rotate(${angle}deg) translate(55%) rotate(${-angle + 90}deg)`;
 
       wheel.appendChild(label);
     });
