@@ -66,7 +66,7 @@
       margin-top: 10px;
       border-radius: 12px;
       border: none;
-      background: #ff6666;
+      background: #3399ff; /* 明るめの青 */
       color: white;
       font-weight: bold;
       cursor: pointer;
@@ -173,8 +173,8 @@
         });
 
         const hitSlice = document.querySelector(`.slice${hitIndex}`);
-        hitSlice.style.fill = '#ff0';
-        hitSlice.style.stroke = '#d33';
+        hitSlice.style.fill = '#d33';
+      
         hitSlice.style.strokeWidth = '3';
         hitSlice.style.filter = 'drop-shadow(0 0 6px #f00)';
         hitSlice.style.animation = 'flash 1s ease infinite';
