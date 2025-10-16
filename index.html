@@ -193,4 +193,12 @@
         });
 
         const hitSlice = document.querySelector(`.slice${hitIndex}`);
-        hitSlice.style.fill
+        hitSlice.style.fill = '#ffd700';
+        hitSlice.style.stroke = '#b8860b';
+        hitSlice.style.strokeWidth = '3';
+        hitSlice.style.filter = `
+          drop-shadow(-4px 0 6px #ffcc00)
+          drop-shadow(4px 0 6px #ffcc00)
+          drop-shadow(0 0 12px #ffd700)
+        `;
+        hit
