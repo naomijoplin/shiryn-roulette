@@ -100,9 +100,16 @@
 
   <button onclick="spin()">ルーレットを回す</button>
   <div id="result"></div>
+<script>
+const outcomes = [
+  ['ハイボール', 'or', 'レモンサワー', '無料'],
+  ['オリジナル', 'ノンアルカクテル','無料'],
+  ['プチ', 'デザートサービス'],
+  ['店長おすすめ', '一品','サービス'],
+  ['プチおかし', 'プレゼント']
+];
 
-  <script>
-   function spin() {
+function spin() {
   const lastSpin = localStorage.getItem('lastSpinDate');
   const today = new Date().toISOString().slice(0, 10);
 
@@ -146,6 +153,4 @@
     localStorage.setItem('lastSpinDate', today);
   }, 3000);
 }
-
-
 </script>
