@@ -72,6 +72,10 @@
                 drop-shadow(2px 0 4px #ffcc00)
                 drop-shadow(0 0 6px #ffd700);
       }
+      .flash {
+  animation: flash 1s ease infinite;
+}
+
     }
     button {
       padding: 10px 20px;
@@ -201,7 +205,8 @@
           drop-shadow(4px 0 6px #ffcc00)
           drop-shadow(0 0 12px #ffd700)
         `;
-        hitSlice.style.animation = 'flash 1s ease infinite';
+      hitSlice.classList.add('flash');
+
 
         const resultEl = document.getElementById('result');
         resultEl.innerHTML = `🎯 結果：<br>${outcome.join(' ')}`;
