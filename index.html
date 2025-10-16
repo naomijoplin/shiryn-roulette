@@ -101,6 +101,8 @@
       <g id="labels"></g>
     </svg>
   </div>
+<audio id="spinSound" src="spin.mp3"></audio>
+<audio id="winSound" src="win.mp3"></audio>
 
   <button onclick="spin()">ルーレットを回す</button>
   <div id="result"></div>
@@ -178,7 +180,7 @@
         alert('今日はもう回しました！また明日お楽しみに✨');
         return;
       }
-
+document.getElementById('spinSound').play(); 
       const wheel = document.getElementById('wheel');
       const angle = Math.floor(Math.random() * 360) + 720;
       wheel.style.transform = `rotate(${angle}deg)`;
@@ -188,6 +190,7 @@
         const index = Math.floor(finalAngle / sliceAngle);
         const hitIndex = index % outcomes.length;
         const outcome = outcomes[hitIndex];
+        document.getElementById('winSound').play();
 
         document.querySelectorAll('path').forEach(p => {
           p.style.opacity = '1';
