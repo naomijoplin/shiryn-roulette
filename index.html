@@ -74,20 +74,30 @@
       }
      
     }
-    button {
-      padding: 10px 20px;
-      margin-top: 10px;
-      border-radius: 12px;
-      border: none;
-      background: #3399ff;
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-    }
+   button {
+  padding: 14px 24px;              /* 十分なタップ領域 */
+  font-size: 1.1em;                /* 見やすい文字サイズ */
+  border-radius: 12px;            /* 丸みで親しみやすさ */
+  background: #3399ff;            /* 目立つ色 */
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  width: 80%;                     /* 横幅を広めに */
+  max-width: 300px;
+  margin: 10px auto;              /* 中央寄せ＋余白 */
+  display: block;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* 立体感 */
+}
+
      .flash {
   animation: flash 1s ease infinite;
 }
-
+@media (max-width: 600px) {
+  button {
+    font-size: 1.2em;
+    padding: 16px 28px;
+  }
+}
   </style>
 </head>
 <body>
