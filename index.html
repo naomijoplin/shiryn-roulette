@@ -101,72 +101,7 @@
   <button onclick="spin()">ルーレットを回す</button>
   <div id="result"></div>
 
-  <script>
-    const outcomes = [
-      ['ハイボール', 'or', 'レモンサワー', '無料'],
-      ['オリジナル', 'ノンアルカクテル','無料'],
-      ['プチ', 'デザートサービス'],
-      ['店長おすすめ', '一品','サービス'],
-      ['プチおかし', 'プレゼント']
-    ];
-
-    const sliceAngle = 360 / outcomes.length;
-    const radius = 100;
-    const paths = document.getElementById('paths');
-    const labels = document.getElementById('labels');
-    const slices = document.getElementById('slices');
-
-    outcomes.forEach((lines, i) => {
-      const startAngle = i * sliceAngle;
-      const endAngle = startAngle + sliceAngle;
-      const largeArc = sliceAngle > 180 ? 1 : 0;
-
-      const x1 = radius + radius * Math.cos(Math.PI * startAngle / 180);
-      const y1 = radius + radius * Math.sin(Math.PI * startAngle / 180);
-      const x2 = radius + radius * Math.cos(Math.PI * endAngle / 180);
-      const y2 = radius + radius * Math.sin(Math.PI * endAngle / 180);
-
-      const pathData = `
-        M ${radius},${radius}
-        L ${x1},${y1}
-        A ${radius},${radius} 0 ${largeArc} 1 ${x2},${y2}
-        Z
-      `;
-
-      const colors = ['#f66','#6c6','#66f','#fc6','#c6f','#6cf'];
-      const slice = document.createElementNS("http://www.w3.org/2000/svg", "path");
-      slice.setAttribute("d", pathData);
-      slice.setAttribute("fill", colors[i % colors.length]);
-      slice.setAttribute("class", `slice${i}`);
-      slices.appendChild(slice);
-
-      const arcPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
-      const arcId = `arc${i}`;
-      const arcX1 = radius + (radius * 0.7) * Math.cos(Math.PI * startAngle / 180);
-      const arcY1 = radius + (radius * 0.7) * Math.sin(Math.PI * startAngle / 180);
-      const arcX2 = radius + (radius * 0.7) * Math.cos(Math.PI * endAngle / 180);
-      const arcY2 = radius + (radius * 0.7) * Math.sin(Math.PI * endAngle / 180);
-
-      arcPath.setAttribute("d", `M ${arcX1},${arcY1} A ${radius*0.75},${radius*0.75} 0 ${largeArc} 1 ${arcX2},${arcY2}`);
-      arcPath.setAttribute("id", arcId);
-      paths.appendChild(arcPath);
-
-      lines.forEach((lineText, lineIndex) => {
-        const textEl = document.createElementNS("http://www.w3.org/2000/svg", "text");
-        const dy = -14 + lineIndex * 13;
-        textEl.setAttribute("dy", dy.toString());
-
-        const textPath = document.createElementNS("http://www.w3.org/2000/svg", "textPath");
-        textPath.setAttribute("href", `#${arcId}`);
-        textPath.setAttribute("startOffset", "50%");
-        textPath.textContent = lineText;
-
-        textEl.appendChild(textPath);
-        labels.appendChild(textEl);
-      });
-    });
-
-  
+ <script>
   function spin() {
     const wheel = document.getElementById('wheel');
     const angle = Math.floor(Math.random() * 360) + 720;
@@ -202,5 +137,3 @@
     }, 3000);
   }
 </script>
-
- 
