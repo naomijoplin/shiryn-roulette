@@ -180,20 +180,40 @@
       arcPath.setAttribute("id", arcId);
       paths.appendChild(arcPath);
 
-      lines.forEach((lineText, lineIndex) => {
-        const textEl = document.createElementNS("http://www.w3.org/2000/svg", "text");
-        const dy = -14 + lineIndex * 13;
-        textEl.setAttribute("dy", dy.toString());
+    lines.forEach((lineText, lineIndex) => {
+  const textEl = document.createElementNS("http://www.w3.org/2000/svg", "text");
+  const dy = -14 + lineIndex * 13;
+  textEl.setAttribute("dy", dy.toString());
 
-        const textPath = document.createElementNS("http://www.w3.org/2000/svg", "textPath");
-        textPath.setAttribute("href", `#${arcId}`);
-        textPath.setAttribute("startOffset", "50%");
-        textPath.textContent = lineText;
+  const textPath = document.createElementNS("http://www.w3.org/2000/svg", "textPath");
+  textPath.setAttribute("href", `#${arcId}`);
+  textPath.setAttribute("startOffset", "50%");
+  textPath.textContent = lineText;
 
-        textEl.appendChild(textPath);
-        labels.appendChild(textEl);
-      });
-    });
+  // 景品ごとの色設定
+  const colorMap = {
+    'ハイボール': '#ff5722',
+    'レモンサワー': '#ff5722',
+    'オリジナル': '#3f51b5',
+    'ノンアルカクテル': '#3f51b5',
+    'プチ': '#009688',
+    'デザートサービス': '#009688',
+    '店長おすすめ': '#9c27b0',
+    '一品': '#9c27b0',
+    '1,000円': '#f44336',
+    '引き': '#f44336'
+  };
+
+  const matchedColor = Object.entries(colorMap).find(([key]) => lineText.includes(key));
+  if (matchedColor) {
+    textEl.setAttribute("fill", matchedColor[1]);
+  } else {
+    textEl.setAttribute("fill", "#fff");
+  }
+
+  textEl.appendChild(textPath);
+  labels.appendChild(textEl);
+});
 
     function spin() {
       const lastSpin = localStorage.getItem('lastSpinDate');
