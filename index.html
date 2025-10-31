@@ -179,7 +179,6 @@
       arcPath.setAttribute("d", `M ${arcX1},${arcY1} A ${radius*0.75},${radius*0.75} 0 ${largeArc} 1 ${arcX2},${arcY2}`);
       arcPath.setAttribute("id", arcId);
       paths.appendChild(arcPath);
-
 lines.forEach((lineText, lineIndex) => {
   const textEl = document.createElementNS("http://www.w3.org/2000/svg", "text");
   const dy = -14 + lineIndex * 13;
@@ -204,16 +203,6 @@ lines.forEach((lineText, lineIndex) => {
     '引き': '#f44336'
   };
 
-  const matchedColor = Object.entries(colorMap).find(([key]) => lineText.includes(key));
-  if (matchedColor) {
-    textEl.setAttribute("fill", matchedColor[1]);
-  } else {
-    textEl.setAttribute("fill", "#fff");
-  }
-
-  textEl.appendChild(textPath);
-  labels.appendChild(textEl);
-});
   const matchedColor = Object.entries(colorMap).find(([key]) => lineText.includes(key));
   if (matchedColor) {
     textEl.setAttribute("fill", matchedColor[1]);
