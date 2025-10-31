@@ -204,11 +204,7 @@ lines.forEach((lineText, lineIndex) => {
   };
 
   const matchedColor = Object.entries(colorMap).find(([key]) => lineText.includes(key));
-  if (matchedColor) {
-    textEl.setAttribute("fill", matchedColor[1]);
-  } else {
-    textEl.setAttribute("fill", "#fff");
-  }
+  textEl.setAttribute("fill", matchedColor ? matchedColor[1] : "#fff");
 
   textEl.appendChild(textPath);
   labels.appendChild(textEl);
