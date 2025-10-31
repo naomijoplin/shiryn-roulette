@@ -143,21 +143,20 @@ button:focus,
 
   <script>
 // localStorage.removeItem('lastSpinDate'); // ← テスト用。公開時は無効化
-  const outcomes = [
+const outcomes = [
   ['ハイボール', 'or', 'レモンサワー', '無料'],
   ['オリジナル', 'ノンアルカクテル','無料'],
   ['プチ', 'デザートサービス'],
   ['店長おすすめ', '一品','サービス'],
-  ['1,000円', '引き']
+  ['1,000円', '引き'],
+  ['ハイボール', 'or', 'レモンサワー', '無料'],
+  ['オリジナル', 'ノンアルカクテル','無料'],
+  ['プチ', 'デザートサービス'],
+  ['店長おすすめ', '一品','サービス'],
+  ['ハイボール', 'or', 'レモンサワー', '無料'],
+  ['オリジナル', 'ノンアルカクテル','無料']
 ];
 
-const weightedOutcomes = [
-  ...Array(3).fill(['ハイボール', 'or', 'レモンサワー', '無料']),
-  ...Array(3).fill(['オリジナル', 'ノンアルカクテル','無料']),
-  ...Array(2).fill(['プチ', 'デザートサービス']),
-  ...Array(2).fill(['店長おすすめ', '一品','サービス']),
-  ['1,000円', '引き']
-];
     const sliceAngle = 360 / outcomes.length;
     const radius = 100;
     const paths = document.getElementById('paths');
@@ -248,7 +247,7 @@ document.getElementById('spinSound').play();
         const finalAngle = angle % 360;
         const index = Math.floor(finalAngle / sliceAngle);
         const hitIndex = index % outcomes.length;
-      const outcome = weightedOutcomes[Math.floor(Math.random() * weightedOutcomes.length)];
+   const outcome = outcomes[hitIndex];
         document.getElementById('winSound').play();
 
         document.querySelectorAll('path').forEach(p => {
