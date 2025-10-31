@@ -183,7 +183,7 @@ lines.forEach((lineText, lineIndex) => {
   const textEl = document.createElementNS("http://www.w3.org/2000/svg", "text");
   const dy = -14 + lineIndex * 13;
   textEl.setAttribute("dy", dy.toString());
-
+textEl.setAttribute("font-size", "16px"); // ← ここでサイズ指定
   const textPath = document.createElementNS("http://www.w3.org/2000/svg", "textPath");
   textPath.setAttribute("href", `#${arcId}`);
   textPath.setAttribute("startOffset", "50%");
